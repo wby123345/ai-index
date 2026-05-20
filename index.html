@@ -179,6 +179,13 @@
     font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em;
     flex-shrink: 0;
   }
+  .reg-btn {
+    padding: 3px 10px; border-radius: 6px;
+    background: rgba(245,158,11,0.18); color: var(--sponsor);
+    font-size: 0.72rem; font-weight: 600; text-decoration: none;
+    transition: all 0.2s;
+  }
+  .reg-btn:hover { background: rgba(245,158,11,0.35); }
   .affiliate-tag {
     background: rgba(245,158,11,0.12) !important; color: var(--sponsor) !important;
   }
@@ -377,6 +384,16 @@ const SPONSORED = new Set([
   // "Cursor",
 ]);
 
+// Affiliate 注册入口（跳转去注册拿码）
+const SIGNUP_URLS = {
+  "Cursor":      "https://cursor.com/settings",
+  "ElevenLabs":  "https://elevenlabs.io/affiliates",
+  "Notion AI":   "https://www.notion.so/partners",
+  "HeyGen":      "https://app.partnerstack.com/join?program=heygen",
+  "Monica":      "https://monica.im/affiliate",
+  "Gamma":       "https://gamma.app/affiliates",
+};
+
 // ============================================================
 // CLICK TRACKING (localStorage)
 // ============================================================
@@ -506,6 +523,7 @@ function buildCard(t, isFeatured) {
     <p class="card-desc">${t.desc}</p>
     <div class="card-tags">
       <span class="${tagClass}">${t.cat}${affix}</span>
+      ${hasAffiliate && finalUrl.includes('YOUR_CODE') ? `<a class="reg-btn" href="${SIGNUP_URLS[t.name] || '#'}" target="_blank" rel="noopener" title="去注册拿返佣码" onclick="event.stopPropagation()">去注册</a>` : ''}
     </div>
   </div>`;
 }
