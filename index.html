@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI 万有索引</title>
+<meta name="description" content="收录 40+ 优质人工智能产品，按类别整理，帮你随时找到需要的 AI 工具。">
 <style>
   :root {
     --bg: #0b0b0e;
@@ -16,6 +17,8 @@
     --accent2: #6366f1;
     --tag-bg: #1e1b2e;
     --tag-text: #c4b5fd;
+    --featured-glow: rgba(99,102,241,0.12);
+    --sponsor: #f59e0b;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 16px; }
@@ -45,7 +48,15 @@
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     letter-spacing: -0.02em;
   }
+  .header-right { display: flex; align-items: center; gap: 16px; }
   .header-stats { font-size: 0.8rem; color: var(--text2); }
+  .header-ad-link {
+    font-size: 0.78rem; color: var(--text2);
+    text-decoration: none; padding: 5px 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .header-ad-link:hover { border-color: var(--sponsor); color: var(--sponsor); }
 
   /* Hero */
   .hero {
@@ -78,7 +89,7 @@
   /* Categories */
   .categories {
     display: flex; flex-wrap: wrap; gap: 8px;
-    max-width: 1280px; margin: 0 auto 40px; padding: 0 24px;
+    max-width: 1280px; margin: 0 auto 24px; padding: 0 24px;
     justify-content: center;
   }
   .cat-btn {
@@ -89,6 +100,18 @@
   .cat-btn:hover { border-color: var(--accent2); color: var(--text); }
   .cat-btn.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
 
+  /* Featured section */
+  .featured-section { display: none; }
+  .featured-section.has-featured {
+    display: block;
+    max-width: 1280px; margin: 0 auto 8px; padding: 0 24px;
+  }
+  .section-label {
+    font-size: 0.78rem; font-weight: 600; color: var(--sponsor);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 12px; padding-left: 4px;
+  }
+
   /* Grid */
   .grid {
     max-width: 1280px; margin: 0 auto; padding: 0 24px 80px;
@@ -96,18 +119,27 @@
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
     gap: 16px;
   }
+  .grid-divider {
+    grid-column: 1 / -1; margin: 16px 0 8px;
+    height: 1px; background: var(--border);
+  }
 
   /* Card */
   .card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 12px; padding: 20px 22px;
-    transition: border-color 0.2s, transform 0.15s;
-    cursor: default;
+    transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
+    cursor: pointer; position: relative;
   }
   .card:hover {
     border-color: var(--accent2);
     transform: translateY(-1px);
   }
+  .card.featured {
+    border-color: rgba(245,158,11,0.25);
+    box-shadow: 0 0 20px var(--featured-glow);
+  }
+  .card.featured:hover { border-color: var(--sponsor); }
   .card-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
   .card-icon {
     width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
@@ -117,6 +149,7 @@
   .card-info { flex: 1; min-width: 0; }
   .card-info h3 {
     font-size: 0.95rem; font-weight: 600; margin-bottom: 2px;
+    display: flex; align-items: center; gap: 8px;
   }
   .card-info h3 a {
     color: var(--text); text-decoration: none;
@@ -139,6 +172,32 @@
     font-size: 0.72rem; font-weight: 500;
   }
 
+  /* Sponsor badge */
+  .sponsor-badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    background: rgba(245,158,11,0.15); color: var(--sponsor);
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+  .affiliate-tag {
+    background: rgba(245,158,11,0.12) !important; color: var(--sponsor) !important;
+  }
+
+  /* Clicks counter */
+  .click-count {
+    font-size: 0.7rem; color: var(--text2); margin-left: auto;
+    display: flex; align-items: center; gap: 4px; opacity: 0.7;
+  }
+
+  /* Footer */
+  footer {
+    max-width: 1280px; margin: 0 auto; padding: 40px 24px;
+    border-top: 1px solid var(--border); text-align: center;
+  }
+  footer p { font-size: 0.8rem; color: var(--text2); }
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
   /* Empty */
   .empty {
     grid-column: 1 / -1; text-align: center; padding: 64px 24px;
@@ -151,6 +210,9 @@
     .hero { padding: 40px 16px 32px; }
     .grid { grid-template-columns: 1fr; padding: 0 16px 60px; }
     .categories { padding: 0 16px; }
+    .header-ad-link { display: none; }
+    .section-label { padding-left: 0; }
+    .featured-section.has-featured { padding: 0 16px; }
   }
 </style>
 </head>
@@ -159,7 +221,10 @@
 <header>
   <div class="header-inner">
     <div class="logo">AI 万有索引</div>
-    <div class="header-stats" id="headerStats"></div>
+    <div class="header-right">
+      <div class="header-stats" id="headerStats"></div>
+      <a class="header-ad-link" href="mailto:admin@example.com" title="广告合作 / 收录申请">合作推广</a>
+    </div>
   </div>
 </header>
 
@@ -174,13 +239,25 @@
 
 <div class="categories" id="categories"></div>
 
+<div class="featured-section" id="featuredSection">
+  <div class="section-label">⭐ 精选推荐</div>
+</div>
+<div class="grid" id="featuredGrid" style="margin-bottom:0;padding-bottom:16px"></div>
+
 <div class="grid" id="grid"></div>
 
+<footer>
+  <p>AI 万有索引 · 持续收录优质 AI 工具 · <a href="mailto:admin@example.com">广告 / 收录合作</a></p>
+</footer>
+
 <script>
+// ============================================================
+// TOOLS DATA
+// ============================================================
 const TOOLS = [
   // 大语言模型
-  { name:"ChatGPT", desc:"OpenAI 旗下的对话式 AI，支持文本、图像、代码等多模态交互，生态最丰富的通用助手。", url:"https://chat.openai.com", cat:"大语言模型", color:"#10a37f" },
-  { name:"Claude", desc:"Anthropic 出品，擅长长文写作、代码分析和安全推理，上下文窗口极长。", url:"https://claude.ai", cat:"大语言模型", color:"#d97757" },
+  { name:"ChatGPT", desc:"OpenAI 旗下的对话式 AI，支持文本、图像、代码等多模态交互，生态最丰富的通用助手。", url:"https://chat.openai.com", cat:"大语言模型", color:"#10a37f", featured:true },
+  { name:"Claude", desc:"Anthropic 出品，擅长长文写作、代码分析和安全推理，上下文窗口极长。", url:"https://claude.ai", cat:"大语言模型", color:"#d97757", featured:true },
   { name:"Gemini", desc:"Google 的多模态模型家族，深度整合 Google 生态，支持文本、图像、音视频。", url:"https://gemini.google.com", cat:"大语言模型", color:"#4285f4" },
   { name:"DeepSeek", desc:"国产开源大模型，代码与推理能力突出，性价比极高，API 生态完善。", url:"https://chat.deepseek.com", cat:"大语言模型", color:"#4b6bfb" },
   { name:"Kimi", desc:"月之暗面出品，超长上下文支持 200 万字，擅长文档阅读与信息整理。", url:"https://kimi.moonshot.cn", cat:"大语言模型", color:"#6c5ce7" },
@@ -191,7 +268,7 @@ const TOOLS = [
   { name:"Mistral", desc:"法国开源模型新锐，轻量高效，适合自部署与定制化场景。", url:"https://chat.mistral.ai", cat:"大语言模型", color:"#f90" },
 
   // 图像生成
-  { name:"Midjourney", desc:"风格化图像生成之王，艺术质感出众，设计界首选。通过 Discord 使用。", url:"https://www.midjourney.com", cat:"图像生成", color:"#1e1e2e" },
+  { name:"Midjourney", desc:"风格化图像生成之王，艺术质感出众，设计界首选。通过 Discord 使用。", url:"https://www.midjourney.com", cat:"图像生成", color:"#1e1e2e", featured:true },
   { name:"DALL·E 3", desc:"OpenAI 的图像生成模型，文字排版精准，已深度集成 ChatGPT。", url:"https://openai.com/dall-e-3", cat:"图像生成", color:"#10a37f" },
   { name:"Stable Diffusion", desc:"开源文生图标杆，支持本地部署，社区模型生态极其丰富。", url:"https://stability.ai", cat:"图像生成", color:"#7c3aed" },
   { name:"Leonardo AI", desc:"面向游戏与设计的 AI 图像平台，内置精细模型与编辑工具。", url:"https://leonardo.ai", cat:"图像生成", color:"#f97316" },
@@ -202,16 +279,16 @@ const TOOLS = [
   { name:"Sora", desc:"OpenAI 的视频生成模型，物理世界理解力强，可生成超写实短片。", url:"https://sora.com", cat:"视频生成", color:"#10a37f" },
   { name:"Runway", desc:"专业级 AI 视频创作平台，支持文生视频、图生视频与视频编辑。", url:"https://runwayml.com", cat:"视频生成", color:"#000" },
   { name:"Pika", desc:"轻量有趣的 AI 视频生成工具，特效丰富，社交分享体验好。", url:"https://pika.art", cat:"视频生成", color:"#ec4899" },
-  { name:"可灵", desc:"快手出品的 AI 视频生成，动作连贯性表现优异，中文场景擅长。", url:"https://kling.kuaishou.com", cat:"视频生成", color:"#ff4906" },
+  { name:"可灵", desc:"快手出品的 AI 视频生成，动作连贯性表现优异，中文场景擅长。", url:"https://kling.kuaishou.com", cat:"视频生成", color:"#ff4906", featured:true },
   { name:"HeyGen", desc:"AI 数字人视频生成平台，支持多语种口播视频与虚拟形象定制。", url:"https://www.heygen.com", cat:"视频生成", color:"#6366f1" },
 
   // 代码助手
   { name:"GitHub Copilot", desc:"GitHub 出品的 AI 编程助手，深度集成 VS Code 与 JetBrains，实时补全。", url:"https://github.com/features/copilot", cat:"代码助手", color:"#2ea44f" },
-  { name:"Cursor", desc:"AI-first 编辑器，基于 VS Code，支持对话式编程与全项目理解。", url:"https://cursor.com", cat:"代码助手", color:"#000" },
+  { name:"Cursor", desc:"AI-first 编辑器，基于 VS Code，支持对话式编程与全项目理解。", url:"https://cursor.com", cat:"代码助手", color:"#000", featured:true },
   { name:"Windsurf", desc:"Codeium 出品的 AI IDE，Cascade 模式提供智能体式编程体验。", url:"https://codeium.com/windsurf", cat:"代码助手", color:"#6c5ce7" },
   { name:"v0", desc:"Vercel 出品的 UI 生成工具，自然语言生成前端界面代码，支持 React。", url:"https://v0.dev", cat:"代码助手", color:"#000" },
   { name:"Replit", desc:"在线 IDE 与 AI 编程平台，无需本地配置即可构建和部署全栈应用。", url:"https://replit.com", cat:"代码助手", color:"#f97316" },
-  { name:"Bolt", desc:"StackBlitz 出品的 AI 全栈应用生成器，浏览器内即刻预览和部署。", url:"https://bolt.new", cat:"代码助手", color:"#06b6d4" },
+  { name:"Bolt", desc:"StackBlitz 出品的 AI 全栈应用生成器，浏览器内即刻预览和部署。", url:"https://bolt.new", cat:"代码助手", color:"#06b6d4", featured:true },
 
   // 音频/语音
   { name:"ElevenLabs", desc:"最逼真的 AI 语音合成与克隆，支持 29 种语言，情感表达自然。", url:"https://elevenlabs.io", cat:"音频语音", color:"#8b5cf6" },
@@ -220,7 +297,7 @@ const TOOLS = [
   { name:"NotebookLM", desc:"Google 的 AI 笔记工具，可将文档自动生成双人播客式音频对话。", url:"https://notebooklm.google.com", cat:"音频语音", color:"#f9ab00" },
 
   // AI 搜索
-  { name:"Perplexity", desc:"AI 原生搜索引擎，回答附出处链接，支持追问与深度研究模式。", url:"https://www.perplexity.ai", cat:"AI搜索", color:"#1e1e2e" },
+  { name:"Perplexity", desc:"AI 原生搜索引擎，回答附出处链接，支持追问与深度研究模式。", url:"https://www.perplexity.ai", cat:"AI搜索", color:"#1e1e2e", featured:true },
   { name:"秘塔 AI 搜索", desc:"国产 AI 搜索先锋，无广告直达答案，支持学术与深度搜索模式。", url:"https://metaso.cn", cat:"AI搜索", color:"#2563eb" },
   { name:"天工 AI 搜索", desc:"昆仑万维出品，融合大模型的搜索引擎，支持多模态结果展示。", url:"https://www.tiangong.cn", cat:"AI搜索", color:"#7c3aed" },
   { name:"SearchGPT", desc:"OpenAI 的搜索原型，结合实时网络信息与对话式 AI 回答。", url:"https://chatgpt.com/search", cat:"AI搜索", color:"#10a37f" },
@@ -232,15 +309,62 @@ const TOOLS = [
   { name:"Monica", desc:"全能 AI 浏览器助手，集成写作、翻译、总结、搜索于侧边栏。", url:"https://monica.im", cat:"办公效率", color:"#6366f1" },
 ];
 
-// State
+// ============================================================
+// AFFILIATE LINK MAP
+// Replace values below with your actual affiliate/referral URLs.
+// If a tool is not listed, the original url is used.
+// ============================================================
+const AFFILIATES = {
+  // Example — uncomment and replace with real affiliate links:
+  // "Cursor":       "https://cursor.com/?ref=YOUR_CODE",
+  // "Leonardo AI":  "https://leonardo.ai/?via=YOUR_CODE",
+  // "Perplexity":   "https://perplexity.ai/referral/YOUR_CODE",
+  // "Runway":       "https://runwayml.com/?ref=YOUR_CODE",
+  // "Bolt":         "https://bolt.new/?ref=YOUR_CODE",
+};
+
+// Each tool flagged here gets a "赞助" badge regardless of featured status
+const SPONSORED = new Set([
+  // "ChatGPT",
+  // "Cursor",
+]);
+
+// ============================================================
+// CLICK TRACKING (localStorage)
+// ============================================================
+const CLICKS_KEY = "ai_index_clicks";
+
+function getClicks() {
+  try { return JSON.parse(localStorage.getItem(CLICKS_KEY) || "{}"); }
+  catch { return {}; }
+}
+function recordClick(name) {
+  const clicks = getClicks();
+  clicks[name] = (clicks[name] || 0) + 1;
+  localStorage.setItem(CLICKS_KEY, JSON.stringify(clicks));
+}
+function getClickCount(name) {
+  return getClicks()[name] || 0;
+}
+
+// ============================================================
+// RESOLVE URL (affiliate > sponsored tracking > original)
+// ============================================================
+function resolveUrl(tool) {
+  if (AFFILIATES[tool.name]) return AFFILIATES[tool.name];
+  return tool.url;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
 let activeCat = "全部";
 let searchQuery = "";
-
 const cats = ["全部", ...new Set(TOOLS.map(t => t.cat))];
 
 function init() {
   renderCategories();
-  renderGrid();
+  renderAll();
   bindEvents();
   updateStats();
 }
@@ -252,8 +376,8 @@ function renderCategories() {
   ).join("");
 }
 
-function renderGrid() {
-  const filtered = TOOLS.filter(t => {
+function filterTools() {
+  return TOOLS.filter(t => {
     if (activeCat !== "全部" && t.cat !== activeCat) return false;
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -263,30 +387,79 @@ function renderGrid() {
     }
     return true;
   });
+}
 
-  const grid = document.getElementById("grid");
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="empty"><div class="icon">🔍</div><p>没找到匹配的工具，换个关键词试试？</p></div>`;
-    return;
+function renderAll() {
+  const filtered = filterTools();
+  const featured = filtered.filter(t => t.featured);
+  const regular = filtered.filter(t => !t.featured);
+
+  // Featured grid
+  const fSection = document.getElementById("featuredSection");
+  const fGrid = document.getElementById("featuredGrid");
+  if (featured.length > 0 && activeCat === "全部" && !searchQuery) {
+    fSection.classList.add("has-featured");
+    fGrid.innerHTML = featured.map(t => buildCard(t, true)).join("");
+    fGrid.style.display = "grid";
+  } else {
+    fSection.classList.remove("has-featured");
+    fGrid.innerHTML = "";
+    fGrid.style.display = "none";
   }
 
-  grid.innerHTML = filtered.map(t => {
-    const initials = t.name.slice(0, 2).toUpperCase();
-    return `
-    <div class="card">
-      <div class="card-top">
-        <div class="card-icon" style="background:${t.color};color:#fff">${initials}</div>
-        <div class="card-info">
-          <h3><a href="${t.url}" target="_blank" rel="noopener">${t.name}</a></h3>
-          <div class="domain">${new URL(t.url).hostname}</div>
-        </div>
-      </div>
-      <p class="card-desc">${t.desc}</p>
-      <div class="card-tags"><span class="tag">${t.cat}</span></div>
-    </div>`;
-  }).join("");
+  // Main grid
+  const grid = document.getElementById("grid");
+  const showFeaturedInMain = activeCat !== "全部" || !!searchQuery;
+  const mainTools = showFeaturedInMain ? filtered : regular;
+
+  if (mainTools.length === 0) {
+    grid.innerHTML = `<div class="empty"><div class="icon">🔍</div><p>没找到匹配的工具，换个关键词试试？</p></div>`;
+  } else {
+    const showDivider = !showFeaturedInMain && featured.length > 0 && regular.length > 0 && activeCat === "全部" && !searchQuery;
+    grid.innerHTML = (showDivider ? '<div class="grid-divider"></div>' : '') +
+      mainTools.map(t => buildCard(t, false)).join("");
+  }
 
   updateStats(filtered.length);
+}
+
+function buildCard(t, isFeatured) {
+  const initials = t.name.slice(0, 2).toUpperCase();
+  const finalUrl = resolveUrl(t);
+  const hasAffiliate = !!AFFILIATES[t.name];
+  const isSponsored = SPONSORED.has(t.name);
+  const clicks = getClickCount(t.name);
+
+  const featuredClass = isFeatured ? " featured" : "";
+  const sponsorBadge = isSponsored
+    ? '<span class="sponsor-badge">赞助</span>'
+    : (isFeatured ? '<span class="sponsor-badge">推荐</span>' : "");
+
+  const tagClass = hasAffiliate ? " tag affiliate-tag" : " tag";
+  const affix = hasAffiliate ? " 🔗" : "";
+
+  const clickInfo = clicks > 0
+    ? `<span class="click-count" title="${clicks} 次点击">${clicks}</span>`
+    : "";
+
+  return `
+  <div class="card${featuredClass}" data-tool="${t.name}" data-url="${finalUrl}">
+    <div class="card-top">
+      <div class="card-icon" style="background:${t.color};color:#fff">${initials}</div>
+      <div class="card-info">
+        <h3>
+          <a href="${finalUrl}" target="_blank" rel="noopener">${t.name}</a>
+          ${sponsorBadge}
+          ${clickInfo}
+        </h3>
+        <div class="domain">${new URL(t.url).hostname}</div>
+      </div>
+    </div>
+    <p class="card-desc">${t.desc}</p>
+    <div class="card-tags">
+      <span class="${tagClass}">${t.cat}${affix}</span>
+    </div>
+  </div>`;
 }
 
 function updateStats(count) {
@@ -294,12 +467,15 @@ function updateStats(count) {
   document.getElementById("headerStats").textContent = `${shown} / ${TOOLS.length} 个工具`;
 }
 
+// ============================================================
+// EVENTS
+// ============================================================
 function bindEvents() {
   document.getElementById("categories").addEventListener("click", e => {
     if (e.target.classList.contains("cat-btn")) {
       activeCat = e.target.dataset.cat;
       renderCategories();
-      renderGrid();
+      renderAll();
     }
   });
 
@@ -308,12 +484,43 @@ function bindEvents() {
     clearTimeout(debounce);
     debounce = setTimeout(() => {
       searchQuery = e.target.value.trim();
-      renderGrid();
+      renderAll();
     }, 200);
+  });
+
+  // Click tracking on cards
+  document.addEventListener("click", e => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    // Don't double-count if user clicked the <a> directly
+    if (e.target.closest("a")) return;
+    const toolName = card.dataset.tool;
+    const url = card.dataset.url;
+    if (toolName && url) {
+      recordClick(toolName);
+      window.open(url, "_blank", "noopener");
+    }
+  });
+
+  // Track clicks on <a> links too
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a");
+    if (!a) return;
+    const card = a.closest(".card");
+    if (!card) return;
+    const toolName = card.dataset.tool;
+    if (toolName) recordClick(toolName);
   });
 }
 
 init();
+
+// Debug helper: view click stats in console
+// console.table(
+//   Object.entries(getClicks())
+//     .sort((a,b) => b[1] - a[1])
+//     .map(([name,count]) => ({ 工具: name, 点击: count }))
+// );
 </script>
 </body>
 </html>
