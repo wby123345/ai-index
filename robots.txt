@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://wby123345.github.io/ai-index/sitemap.xml
