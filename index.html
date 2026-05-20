@@ -212,6 +212,8 @@
     .categories { padding: 0 16px; }
     .header-ad-link { display: none; }
     .section-label { padding-left: 0; }
+    footer { padding: 32px 16px; }
+    footer > div { flex-direction: column; gap: 24px; }
     .featured-section.has-featured { padding: 0 16px; }
   }
 </style>
@@ -247,9 +249,32 @@
 <div class="grid" id="grid"></div>
 
 <footer>
-  <p>AI 万有索引 · 持续收录优质 AI 工具 · <a href="mailto:admin@example.com">广告 / 收录合作</a></p>
-</footer>
+  <div style="display:flex;flex-wrap:wrap;gap:32px;text-align:left;max-width:1280px;margin:0 auto">
+    <div style="flex:1;min-width:200px">
+      <h4 style="color:var(--text);margin-bottom:8px;font-size:0.95rem">AI 万有索引</h4>
+      <p style="color:var(--text2);font-size:0.82rem;line-height:1.6;margin:0">收录 40+ 优质 AI 工具，每日更新。<br>帮你发现下一个改变工作方式的 AI。</p>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <h4 style="color:var(--text);margin-bottom:8px;font-size:0.95rem">广告合作</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.82rem;color:var(--text2);line-height:2">
+        <li>⭐ 精选推荐位 — 首页置顶</li>
+        <li>🔗 赞助卡片 — 带「赞助」徽章</li>
+        <li>📩 <a href="mailto:ads@example.com" style="color:var(--accent);text-decoration:none">ads@example.com</a></li>
+      </ul>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <h4 style="color:var(--text);margin-bottom:8px;font-size:0.95rem">Affiliate 注册入口</h4>
+      <ul style="list-style:none;padding:0;margin:0;font-size:0.82rem;line-height:2">
+        <li><a href="https://elevenlabs.io/affiliates" target="_blank" style="color:var(--text2);text-decoration:none">ElevenLabs</a></li>
+        <li><a href="https://www.notion.so/partners" target="_blank" style="color:var(--text2);text-decoration:none">Notion Partner</a></li>
+        <li><a href="https://partnerstack.com/heygen" target="_blank" style="color:var(--text2);text-decoration:none">HeyGen (PartnerStack)</a></li>
+        <li><a href="https://monica.im/affiliate" target="_blank" style="color:var(--text2);text-decoration:none">Monica</a></li>
+        <li><a href="https://gamma.app/affiliates" target="_blank" style="color:var(--text2);text-decoration:none">Gamma</a></li>
+      </ul>
+    </div>
+  </div>
 
+</footer>
 <script>
 // ============================================================
 // TOOLS DATA
@@ -311,16 +336,39 @@ const TOOLS = [
 
 // ============================================================
 // AFFILIATE LINK MAP
-// Replace values below with your actual affiliate/referral URLs.
-// If a tool is not listed, the original url is used.
 // ============================================================
 const AFFILIATES = {
-  // Example — uncomment and replace with real affiliate links:
-  // "Cursor":       "https://cursor.com/?ref=YOUR_CODE",
-  // "Leonardo AI":  "https://leonardo.ai/?via=YOUR_CODE",
-  // "Perplexity":   "https://perplexity.ai/referral/YOUR_CODE",
+  // === 有 Affiliate/Referral 计划的工具（注册后替换 YOUR_CODE）===
+
+  // Cursor — 设置 > Referral 获取推荐链接
+  "Cursor":       "https://cursor.com/referral?code=YOUR_CODE",
+
+  // ElevenLabs — elevenlabs.io/affiliates 注册
+  "ElevenLabs":   "https://elevenlabs.io/?via=YOUR_CODE",
+
+  // Notion AI — notion.so/partners 申请 Partner
+  "Notion AI":    "https://affiliate.notion.so/?via=YOUR_CODE",
+
+  // HeyGen — PartnerStack: partnerstack.com/heygen
+  "HeyGen":       "https://www.heygen.com/?ref=YOUR_CODE",
+
+  // Monica — monica.im/affiliate 注册
+  "Monica":       "https://monica.im/?ref=YOUR_CODE",
+
+  // Gamma — gamma.app/affiliates 注册
+  "Gamma":        "https://gamma.app/?via=YOUR_CODE",
+
+  // === 以下待确认（取消注释即可启用）===
+  // Perplexity: perplexity.ai/affiliates
+  // "Perplexity":   "https://perplexity.ai/referral?code=YOUR_CODE",
+  // Runway: runwayml.com/partners
   // "Runway":       "https://runwayml.com/?ref=YOUR_CODE",
+  // Leonardo AI: leonardo.ai/affiliates
+  // "Leonardo AI":  "https://leonardo.ai/?via=YOUR_CODE",
+  // Bolt: bolt.new/affiliates
   // "Bolt":         "https://bolt.new/?ref=YOUR_CODE",
+  // Replit: replit.com/affiliates
+  // "Replit":       "https://replit.com/?ref=YOUR_CODE",
 };
 
 // Each tool flagged here gets a "赞助" badge regardless of featured status
